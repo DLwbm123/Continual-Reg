@@ -3,11 +3,7 @@
   "seed": 42,
   "independent_reference_seed": 42,
   "reference_steps": 10000,
-  "missing_references": [
-    "ctct",
-    "nlst",
-    "mrct"
-  ],
+  "missing_references": [],
   "TRE_score_transform": "q = 1 / physical RMS TRE; BWTR = initial_TRE/final_TRE - 1; RMA = independent_TRE/initial_TRE",
   "summaries": [
     {
@@ -15,36 +11,36 @@
       "metric": "Dice",
       "BWTR": -0.08709704379329775,
       "BWTR_tasks": 2,
-      "RMA": null,
+      "RMA": 1.015592438824588,
       "RMA_tasks": 2,
-      "RMA_complete": false
+      "RMA_complete": true
     },
     {
       "method": "mer",
       "metric": "TRE_mm",
       "BWTR": -0.06701728029517517,
       "BWTR_tasks": 1,
-      "RMA": null,
+      "RMA": 1.0177056417705446,
       "RMA_tasks": 1,
-      "RMA_complete": false
+      "RMA_complete": true
     },
     {
       "method": "samcl",
       "metric": "Dice",
       "BWTR": -0.0738881637453277,
       "BWTR_tasks": 2,
-      "RMA": null,
+      "RMA": 1.08916592580779,
       "RMA_tasks": 2,
-      "RMA_complete": false
+      "RMA_complete": true
     },
     {
       "method": "samcl",
       "metric": "TRE_mm",
       "BWTR": -0.08917211284043736,
       "BWTR_tasks": 1,
-      "RMA": null,
+      "RMA": 1.0096910939334214,
       "RMA_tasks": 1,
-      "RMA_complete": false
+      "RMA_complete": true
     }
   ]
 }

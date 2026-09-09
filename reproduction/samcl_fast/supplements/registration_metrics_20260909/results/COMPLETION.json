@@ -1,0 +1,23 @@
+{
+  "status": "complete",
+  "completed_at": "2026-09-09T12:31:12+08:00",
+  "verified_at": "2026-09-09T15:41:53+08:00",
+  "reference_tasks": [
+    "ctct",
+    "nlst",
+    "mrct"
+  ],
+  "steps_per_reference": 10000,
+  "seed": 42,
+  "resource_combinations": 12,
+  "checkpoint_reload": "3/3 passed",
+  "missing_RMA_references": [],
+  "worker_processes_remaining": 0,
+  "stderr_nonempty_files": 0,
+  "data_and_weights_published": false,
+  "remaining_limitations": [
+    "single seed",
+    "resource timings are short measurements, not full training timings",
+    "historical unique replay counts were not logged; DRR is unavailable"
+  ]
+}

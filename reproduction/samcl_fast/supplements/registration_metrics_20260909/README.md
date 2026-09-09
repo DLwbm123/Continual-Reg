@@ -1,5 +1,7 @@
 # Registration metrics supplement
 
+**Completed 2026-09-09 12:31 China Standard Time.** All three 10,000-step independent references passed final-checkpoint reload evaluation; all 12 resource measurements finished. Final RMA/BWTR and resource tables are in [the report](results/REPORT.md). This is a single-seed supplement; historical DRR remains unavailable.
+
 This supplement fills missing metrics for the **existing seed-42 native-v4
 reproduction**, without importing scores from a paper or rerunning the MER/SAMCL
 continual sequences. It retains their input size (112 × 96 × 112), task order
