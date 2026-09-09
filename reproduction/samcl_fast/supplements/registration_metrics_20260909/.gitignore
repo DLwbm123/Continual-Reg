@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+references/*/checkpoints/
+*.pt
+*.pth
+checks/
+logs/
+*.partial

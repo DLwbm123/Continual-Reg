@@ -1,0 +1,736 @@
+diff --git a/.gitignore b/.gitignore
+index 5509140..70c225c 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,3 @@
+ *.DS_Store
++__pycache__/
++*.py[cod]
+diff --git a/cfgs/default/datasets/continual3d.yml b/cfgs/default/datasets/continual3d.yml
+index f255aa8..de8d6d1 100755
+--- a/cfgs/default/datasets/continual3d.yml
++++ b/cfgs/default/datasets/continual3d.yml
+@@ -1,7 +1,10 @@
+-dataset:
++dataset:
++    root: ${oc.env:LEARN2REG_ROOT}
+     n_channels_img: 1
+     dim: 3
+     size_img: [112, 96, 112]
++    nlst_spacing_mm: [3.0, 3.0, 3.0]
++    keypoint_grid: native_v4
+     one_sample_only: False
+     normalization: min-max
+     intensity_aug: False
+diff --git a/cfgs/default/datasets/ctct3d.yml b/cfgs/default/datasets/ctct3d.yml
+index 374af9a..05180c5 100755
+--- a/cfgs/default/datasets/ctct3d.yml
++++ b/cfgs/default/datasets/ctct3d.yml
+@@ -1,4 +1,5 @@
+-dataset:
++dataset:
++    root: ${oc.env:LEARN2REG_ROOT}
+     n_channels_img: 1
+     dim: 3
+     size_img: [112, 96, 112]
+@@ -7,4 +8,4 @@ dataset:
+     n_classes: 14
+     one_sample_only: False
+     normalization: min-max
+-    intensity_aug: False
+\ No newline at end of file
++    intensity_aug: False
+diff --git a/cfgs/default/datasets/mrct3d.yml b/cfgs/default/datasets/mrct3d.yml
+index e982461..9d6a5fc 100755
+--- a/cfgs/default/datasets/mrct3d.yml
++++ b/cfgs/default/datasets/mrct3d.yml
+@@ -1,4 +1,5 @@
+-dataset:
++dataset:
++    root: ${oc.env:LEARN2REG_ROOT}
+     n_channels_img: 1
+     dim: 3
+     size_img: [112, 96, 112]
+@@ -7,4 +8,4 @@ dataset:
+     n_classes: 5
+     one_sample_only: False
+     normalization: min-max
+-    intensity_aug: False
+\ No newline at end of file
++    intensity_aug: False
+diff --git a/cfgs/default/datasets/multitask3d.yml b/cfgs/default/datasets/multitask3d.yml
+index 15d9ce2..97e46b1 100755
+--- a/cfgs/default/datasets/multitask3d.yml
++++ b/cfgs/default/datasets/multitask3d.yml
+@@ -1,7 +1,8 @@
+-dataset:
++dataset:
++    root: ${oc.env:LEARN2REG_ROOT}
+     n_channels_img: 1
+     dim: 3
+     size_img: [112, 96, 112]
+     one_sample_only: False
+     normalization: min-max
+-    intensity_aug: False
+\ No newline at end of file
++    intensity_aug: False
+diff --git a/cfgs/default/datasets/nlst3d.yml b/cfgs/default/datasets/nlst3d.yml
+index 9d3abda..08228ff 100755
+--- a/cfgs/default/datasets/nlst3d.yml
++++ b/cfgs/default/datasets/nlst3d.yml
+@@ -1,4 +1,5 @@
+-dataset:
++dataset:
++    root: ${oc.env:LEARN2REG_ROOT}
+     n_channels_img: 1
+     dim: 3
+     size_img: [112, 96, 112]
+@@ -6,4 +7,4 @@ dataset:
+     n_mods: 1
+     one_sample_only: False
+     normalization: min-max
+-    intensity_aug: False
+\ No newline at end of file
++    intensity_aug: False
+diff --git a/cfgs/default/datasets/oasis3d.yml b/cfgs/default/datasets/oasis3d.yml
+index 3b8ea74..24f2491 100755
+--- a/cfgs/default/datasets/oasis3d.yml
++++ b/cfgs/default/datasets/oasis3d.yml
+@@ -1,4 +1,5 @@
+-dataset:
++dataset:
++    root: ${oc.env:LEARN2REG_ROOT}
+     n_channels_img: 1
+     dim: 3
+     size_img: [112, 96, 112]
+@@ -7,4 +8,4 @@ dataset:
+     n_classes: 36
+     one_sample_only: False
+     normalization: min-max
+-    intensity_aug: False
+\ No newline at end of file
++    intensity_aug: False
+diff --git a/cfgs/default/models/continual_reg.yml b/cfgs/default/models/continual_reg.yml
+index 5ae7fac..914904c 100755
+--- a/cfgs/default/models/continual_reg.yml
++++ b/cfgs/default/models/continual_reg.yml
+@@ -27,6 +27,7 @@ model:
+         win: 3
+     tre:
+         label_center: False
++        coordinate_scale: 2.0  # Native 3-mm voxels to original 1.5-mm voxel loss units.
+     dice:
+         kernel_sigma: 1
+     regularization:
+diff --git a/cfgs/mer.yml b/cfgs/mer.yml
+index 7a8237d..edc952b 100644
+--- a/cfgs/mer.yml
++++ b/cfgs/mer.yml
+@@ -1,6 +1,6 @@
+ exp:
+     name: mer
+-    names_exp_delete: ['tmp', 'train_mer']
++    names_exp_delete: null
+     n_workers: 2
+     idx_device: 0
+     train:
+@@ -36,7 +36,7 @@ method:
+     er:
+         buffer_size: 200
+     mer:
+-        beta: 0.5
++        beta: 0.25
+ 
+ net:
+     n_channels_init: 16
+diff --git a/cfgs/mersam.yml b/cfgs/mersam.yml
+index 9b532e3..475f4cc 100644
+--- a/cfgs/mersam.yml
++++ b/cfgs/mersam.yml
+@@ -1,6 +1,6 @@
+ exp:
+     name: mersam
+-    names_exp_delete: ['tmp', 'train_mersam']
++    names_exp_delete: null
+     n_workers: 2
+     idx_device: 0
+     train:
+diff --git a/core/data/data_providers/NLSTDataProvider.py b/core/data/data_providers/NLSTDataProvider.py
+index aa6dd88..9d787f2 100755
+--- a/core/data/data_providers/NLSTDataProvider.py
++++ b/core/data/data_providers/NLSTDataProvider.py
+@@ -103,6 +103,14 @@ class DataProvider(Dataset):
+         p1 = pd.read_csv(name1.replace(self.image_prefix, 'keypoints').replace('.nii.gz', '.csv'), header=None).to_numpy(dtype=np.float32)
+         p2 = pd.read_csv(name2.replace(self.image_prefix, 'keypoints').replace('.nii.gz', '.csv'), header=None).to_numpy(dtype=np.float32)
+ 
++        for points, image in ((p1, img1), (p2, img2)):
++            if (points.ndim != 2 or points.shape[1] != 3 or not len(points)
++                    or not np.isfinite(points).all() or np.any(points < 0)
++                    or np.any(points > np.asarray(image.shape[-3:]) - 1)):
++                raise ValueError(f'NLST landmarks must be finite native-grid coordinates: {pair_names}')
++        if p1.shape != p2.shape:
++            raise ValueError(f'Unmatched NLST landmarks: {pair_names}')
++
+         images = np.stack([img1, img2]) # [2, *vol_shape]
+         masks = np.stack([mask1, mask2])
+         keypoints = np.stack([p1, p2]) # [2, n, 3]
+diff --git a/core/data/image_utils.py b/core/data/image_utils.py
+index e547527..25ced7d 100755
+--- a/core/data/image_utils.py
++++ b/core/data/image_utils.py
+@@ -12,6 +12,7 @@ import itertools
+ import re
+ import nibabel as nib
+ import numpy as np
++from functools import lru_cache
+ import torch
+ import torch.nn.functional as F
+ from PIL import Image
+@@ -73,7 +74,8 @@ def strsort(alist):
+     return alist
+ 
+ 
+-def load_image_nii(path, dtype=np.float32, scale=0, order=1):
++@lru_cache(maxsize=2048)
++def _load_image_nii_cached(path, dtype=np.float32, scale=0, order=1):
+     img = nib.load(path)
+     image = np.asarray(img.get_fdata(), dtype)
+     if scale > 0:
+@@ -81,6 +83,11 @@ def load_image_nii(path, dtype=np.float32, scale=0, order=1):
+     return image, img.affine, img.header
+ 
+ 
++def load_image_nii(path, dtype=np.float32, scale=0, order=1):
++    image, affine, header = _load_image_nii_cached(path, dtype, scale, order)
++    return image.copy(), affine.copy(), header.copy()
++
++
+ def save_image_nii(array, save_path, **kwargs):
+     affine = kwargs.pop("affine", np.eye(4))
+     header = kwargs.pop("header", None)
+diff --git a/core/datasets/continual3d.py b/core/datasets/continual3d.py
+index d8aa965..62625b5 100755
+--- a/core/datasets/continual3d.py
++++ b/core/datasets/continual3d.py
+@@ -3,7 +3,8 @@ from core.data.data_providers.CTCTDataProvider import DataProvider as CTCTDataPr
+ from core.data.data_providers.MRCTDataProvider import DataProvider as MRCTDataProvider
+ from core.data.data_providers.NLSTDataProvider import DataProvider as NLSTDataProvider
+ from core.data.data_providers.OASISDataProvider import DataProvider as OASISDataProvider
+-from core.data.image_utils import get_label_center
++from core.data.image_utils import get_label_center
++from core.datasets.paths import learn2reg_root, require_nonempty
+ 
+ import os
+ import numpy as np
+@@ -16,7 +17,7 @@ class Continual3D:
+         self.mode = 'valid' if mode == 'val' else mode
+         self.task = task
+ 
+-        root_path = '/Learn2Reg/'
++        root_path = learn2reg_root(cfg)
+         
+         if mode == 'train':
+             training = True
+@@ -26,23 +27,28 @@ class Continual3D:
+             oasis_max_length = 200
+ 
+         if self.task == "ctct":
+-            dataset = CTCTDataProvider(f'{root_path}/AbdomenCTCT/{self.mode}', 
++            data_path = os.path.join(root_path, 'AbdomenCTCT', self.mode)
++            dataset = CTCTDataProvider(data_path,
+                                        intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
+         elif self.task == "mrct":
+             if self.mode == 'test':
+-                dataset = MRCTDataProvider(f'{root_path}/AbdomenMRCT/{self.mode}', paired=True)
+-            else:
+-                dataset = MRCTDataProvider(f'{root_path}/AbdomenMRCT/{self.mode}', paired=False, 
++                data_path = os.path.join(root_path, 'AbdomenMRCT', self.mode)
++                dataset = MRCTDataProvider(data_path, paired=True)
++            else:
++                data_path = os.path.join(root_path, 'AbdomenMRCT', self.mode)
++                dataset = MRCTDataProvider(data_path, paired=False,
+                                            intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
+         elif self.task == "nlst":
+-            dataset = NLSTDataProvider(f'{root_path}/NLST/{self.mode}', 
++            data_path = os.path.join(root_path, 'NLST', self.mode)
++            dataset = NLSTDataProvider(data_path,
+                                        intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
+         elif self.task == "oasis":
+-            dataset = OASISDataProvider(f'{root_path}/OASIS/{self.mode}',
++            data_path = os.path.join(root_path, 'OASIS', self.mode)
++            dataset = OASISDataProvider(data_path,
+                                         training=training, max_length=oasis_max_length,
+                                         intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
+ 
+-        self.dataset = dataset
++        self.dataset = require_nonempty(dataset, data_path)
+ 
+     def __len__(self):
+         if self.mode == 'test' and self.cfg.exp.test.save_result.enable and self.cfg.exp.test.save_result.idx_sample >= 0:
+@@ -91,7 +97,7 @@ class Continual3D:
+             if 'keypoints' in sample:
+                 keypoints.append(torch.from_numpy(sample.pop('keypoints')))
+             elif self.cfg.model.tre.label_center:
+-                keypoints.append(get_label_center(seg) * 2) # [2, n, 3]
++                keypoints.append(get_label_center(seg)) # [2, n, 3]
+             else:
+                 keypoints.append(torch.zeros(2, 1, 3))
+ 
+@@ -129,4 +135,4 @@ class Continual3D:
+         # segs: [B, 2, H, W, D]
+         # masks: [B, 2, H, W, D]
+         # keypoints: [B, 2, n, 3]
+-        return data
+\ No newline at end of file
++        return data
+diff --git a/core/datasets/ctct3d.py b/core/datasets/ctct3d.py
+index ffa3bf2..c3f4027 100755
+--- a/core/datasets/ctct3d.py
++++ b/core/datasets/ctct3d.py
+@@ -2,7 +2,8 @@ import torch
+ from core.data.data_providers.CTCTDataProvider import DataProvider
+ import os
+ import numpy as np
+-from core.data.image_utils import get_label_center
++from core.data.image_utils import get_label_center
++from core.datasets.paths import learn2reg_root, require_nonempty
+ 
+ 
+ class CTCT3D:
+@@ -11,7 +12,7 @@ class CTCT3D:
+         self.mode = mode
+         self.modalities = cfg.dataset.mods
+ 
+-        root_path = '/Learn2Reg/AbdomenCTCT'
++        root_path = os.path.join(learn2reg_root(cfg), 'AbdomenCTCT')
+ 
+         if mode == 'val' or self.cfg.dataset.one_sample_only:
+             data_search_path = f'{root_path}/valid'
+@@ -23,8 +24,10 @@ class CTCT3D:
+             data_search_path = f'{root_path}/test'
+             training = False
+ 
+-        self.dataset = DataProvider(data_search_path, training=training, 
+-                                    intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
++        self.dataset = require_nonempty(
++            DataProvider(data_search_path, training=training,
++                         intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train')),
++            data_search_path)
+ 
+     def __len__(self):
+         if self.mode == 'test' and self.cfg.exp.test.save_result.enable and self.cfg.exp.test.save_result.idx_sample >= 0:
+@@ -79,7 +82,7 @@ class CTCT3D:
+         # data = {'imgs': imgs, 'segs': segs}
+         
+         if self.cfg.model.tre.label_center:
+-            keypoints = [get_label_center(seg) * 2 for seg in segs] # B * [2, n, 3
++            keypoints = [get_label_center(seg) for seg in segs] # B * [2, n, 3
+             data['keypoints'] = keypoints
+         
+         return data
+diff --git a/core/datasets/mrct3d.py b/core/datasets/mrct3d.py
+index 3e48bcf..a610695 100755
+--- a/core/datasets/mrct3d.py
++++ b/core/datasets/mrct3d.py
+@@ -2,7 +2,8 @@ import torch
+ from core.data.data_providers.MRCTDataProvider import DataProvider
+ import os
+ import numpy as np
+-from core.data.image_utils import get_label_center
++from core.data.image_utils import get_label_center
++from core.datasets.paths import learn2reg_root, require_nonempty
+ 
+ 
+ class MRCT3D:
+@@ -11,7 +12,7 @@ class MRCT3D:
+         self.mode = mode
+         self.modalities = cfg.dataset.mods
+ 
+-        root_path = '/Learn2Reg/AbdomenMRCT'
++        root_path = os.path.join(learn2reg_root(cfg), 'AbdomenMRCT')
+ 
+         if mode == 'val' or self.cfg.dataset.one_sample_only:
+             data_search_path = f'{root_path}/valid'
+@@ -23,8 +24,10 @@ class MRCT3D:
+             data_search_path = f'{root_path}/test'
+             paired = True
+ 
+-        self.dataset = DataProvider(data_search_path, paired=paired,
+-                                    intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
++        self.dataset = require_nonempty(
++            DataProvider(data_search_path, paired=paired,
++                         intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train')),
++            data_search_path)
+ 
+     def __len__(self):
+         if self.mode == 'test' and self.cfg.exp.test.save_result.enable and self.cfg.exp.test.save_result.idx_sample >= 0:
+@@ -82,7 +85,7 @@ class MRCT3D:
+         # data = {'imgs': imgs, 'segs': segs}
+         
+         if self.cfg.model.tre.label_center:
+-            keypoints = [get_label_center(seg) * 2 for seg in segs] # B * [2, n, 3
++            keypoints = [get_label_center(seg) for seg in segs] # B * [2, n, 3
+             data['keypoints'] = keypoints
+         
+         return data
+diff --git a/core/datasets/multitask3d.py b/core/datasets/multitask3d.py
+index 1bbf4d2..affadf9 100755
+--- a/core/datasets/multitask3d.py
++++ b/core/datasets/multitask3d.py
+@@ -3,7 +3,8 @@ from core.data.data_providers.CTCTDataProvider import DataProvider as CTCTDataPr
+ from core.data.data_providers.MRCTDataProvider import DataProvider as MRCTDataProvider
+ from core.data.data_providers.NLSTDataProvider import DataProvider as NLSTDataProvider
+ from core.data.data_providers.OASISDataProvider import DataProvider as OASISDataProvider
+-from torch.utils.data import ConcatDataset
++from torch.utils.data import ConcatDataset
++from core.datasets.paths import learn2reg_root, require_nonempty
+ 
+ import os
+ import numpy as np
+@@ -14,29 +15,32 @@ class MultiTask3D:
+         self.cfg = cfg
+         self.mode = mode
+ 
+-        root_path = '/datasets/Learn2Reg/'
++        root_path = learn2reg_root(cfg)
+ 
+         if mode == 'val' or self.cfg.dataset.one_sample_only:
+-            dataset1 = CTCTDataProvider(f'{root_path}/AbdomenCTCT/valid')
+-            dataset2 = MRCTDataProvider(f'{root_path}/AbdomenMRCT/valid', paired=False)
+-            dataset3 = NLSTDataProvider(f'{root_path}/NLST/valid')
+-            dataset4 = OASISDataProvider(f'{root_path}/OASIS/valid', training=False)
++            dataset1 = CTCTDataProvider(os.path.join(root_path, 'AbdomenCTCT', 'valid'))
++            dataset2 = MRCTDataProvider(os.path.join(root_path, 'AbdomenMRCT', 'valid'), paired=False)
++            dataset3 = NLSTDataProvider(os.path.join(root_path, 'NLST', 'valid'))
++            dataset4 = OASISDataProvider(os.path.join(root_path, 'OASIS', 'valid'), training=False)
+         elif mode == 'train':
+-            dataset1 = CTCTDataProvider(f'{root_path}/AbdomenCTCT/train', 
++            dataset1 = CTCTDataProvider(os.path.join(root_path, 'AbdomenCTCT', 'train'),
+                                         intensity_aug=cfg.dataset.intensity_aug)
+-            dataset2 = MRCTDataProvider(f'{root_path}/AbdomenMRCT/train', paired=False,
++            dataset2 = MRCTDataProvider(os.path.join(root_path, 'AbdomenMRCT', 'train'), paired=False,
+                                         intensity_aug=cfg.dataset.intensity_aug)
+-            dataset3 = NLSTDataProvider(f'{root_path}/NLST/train',
++            dataset3 = NLSTDataProvider(os.path.join(root_path, 'NLST', 'train'),
+                                         intensity_aug=cfg.dataset.intensity_aug)
+-            dataset4 = OASISDataProvider(f'{root_path}/OASIS/train',
++            dataset4 = OASISDataProvider(os.path.join(root_path, 'OASIS', 'train'),
+                                          intensity_aug=cfg.dataset.intensity_aug)
+         elif mode == 'test':
+-            dataset1 = CTCTDataProvider(f'{root_path}/AbdomenCTCT/test')
+-            dataset2 = MRCTDataProvider(f'{root_path}/AbdomenMRCT/test', paired=True)
+-            dataset3 = NLSTDataProvider(f'{root_path}/NLST/test')
+-            dataset4 = OASISDataProvider(f'{root_path}/OASIS/test', training=False)
++            dataset1 = CTCTDataProvider(os.path.join(root_path, 'AbdomenCTCT', 'test'))
++            dataset2 = MRCTDataProvider(os.path.join(root_path, 'AbdomenMRCT', 'test'), paired=True)
++            dataset3 = NLSTDataProvider(os.path.join(root_path, 'NLST', 'test'))
++            dataset4 = OASISDataProvider(os.path.join(root_path, 'OASIS', 'test'), training=False)
+ 
+-        self.datasets = [dataset1, dataset2, dataset3, dataset4]
++        self.datasets = [
++            require_nonempty(dataset, getattr(dataset, 'data_search_path', root_path))
++            for dataset in (dataset1, dataset2, dataset3, dataset4)
++        ]
+         self.cum_length = np.cumsum([0] + [len(dataset) for dataset in self.datasets])
+         self.dataset = ConcatDataset(self.datasets)
+ 
+diff --git a/core/datasets/nlst3d.py b/core/datasets/nlst3d.py
+index d751604..51ff63a 100755
+--- a/core/datasets/nlst3d.py
++++ b/core/datasets/nlst3d.py
+@@ -1,7 +1,8 @@
+ import torch
+ from core.data.data_providers.NLSTDataProvider import DataProvider
+ import os
+-import numpy as np
++import numpy as np
++from core.datasets.paths import learn2reg_root, require_nonempty
+ 
+ 
+ class NLST3D:
+@@ -10,7 +11,7 @@ class NLST3D:
+         self.mode = mode
+         self.modalities = cfg.dataset.mods
+ 
+-        root_path = '/Learn2Reg/NLST'
++        root_path = os.path.join(learn2reg_root(cfg), 'NLST')
+ 
+         if mode == 'val' or self.cfg.dataset.one_sample_only:
+             data_search_path = f'{root_path}/valid'
+@@ -19,8 +20,10 @@ class NLST3D:
+         elif mode == 'test':
+             data_search_path = f'{root_path}/test'
+ 
+-        self.dataset = DataProvider(data_search_path, 
+-                                    intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
++        self.dataset = require_nonempty(
++            DataProvider(data_search_path,
++                         intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train')),
++            data_search_path)
+ 
+     def __len__(self):
+         if self.mode == 'test' and self.cfg.exp.test.save_result.enable and self.cfg.exp.test.save_result.idx_sample >= 0:
+diff --git a/core/datasets/oasis3d.py b/core/datasets/oasis3d.py
+index e3898df..9042e01 100755
+--- a/core/datasets/oasis3d.py
++++ b/core/datasets/oasis3d.py
+@@ -2,7 +2,8 @@ import torch
+ from core.data.data_providers.OASISDataProvider import DataProvider
+ import os
+ import numpy as np
+-from core.data.image_utils import get_label_center
++from core.data.image_utils import get_label_center
++from core.datasets.paths import learn2reg_root, require_nonempty
+ 
+ 
+ class OASIS3D:
+@@ -11,7 +12,7 @@ class OASIS3D:
+         self.mode = 'valid' if mode == 'val' else mode
+         self.modalities = cfg.dataset.mods
+ 
+-        root_path = '/Learn2Reg/OASIS'
++        root_path = os.path.join(learn2reg_root(cfg), 'OASIS')
+             
+         if mode == 'train':
+             training = True
+@@ -27,9 +28,10 @@ class OASIS3D:
+         elif mode == 'test':
+             data_search_path = f'{root_path}/test'
+ 
+-        self.dataset = DataProvider(data_search_path,
+-                                    training=training, max_length=oasis_max_length, 
+-                                    intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train'))
++        self.dataset = require_nonempty(DataProvider(data_search_path,
++                                    training=training, max_length=oasis_max_length, 
++                                    intensity_aug=cfg.dataset.intensity_aug & (self.mode == 'train')),
++                                    data_search_path)
+ 
+     def __len__(self):
+         if self.mode == 'test' and self.cfg.exp.test.save_result.enable and self.cfg.exp.test.save_result.idx_sample >= 0:
+@@ -87,7 +89,7 @@ class OASIS3D:
+         # data = {'imgs': imgs, 'segs': segs}
+         
+         if self.cfg.model.tre.label_center:
+-            keypoints = [get_label_center(seg) * 2 for seg in segs] # B * [2, n, 3
++            keypoints = [get_label_center(seg) for seg in segs] # B * [2, n, 3
+             data['keypoints'] = keypoints
+         
+         return data
+diff --git a/core/datasets/paths.py b/core/datasets/paths.py
+new file mode 100644
+index 0000000..93bcd4c
+--- /dev/null
++++ b/core/datasets/paths.py
+@@ -0,0 +1,20 @@
++import os
++
++
++def learn2reg_root(cfg):
++    configured = cfg.dataset.get('root', None)
++    root = configured or os.environ.get('LEARN2REG_ROOT')
++    if not root:
++        raise ValueError(
++            'Learn2Reg data root is unset. Set dataset.root or LEARN2REG_ROOT.'
++        )
++    root = os.path.abspath(os.path.expanduser(str(root)))
++    if not os.path.isdir(root):
++        raise FileNotFoundError(f'Learn2Reg data root does not exist: {root}')
++    return root
++
++
++def require_nonempty(dataset, path):
++    if len(dataset) == 0:
++        raise RuntimeError(f'Dataset provider found no usable pairs under: {path}')
++    return dataset
+diff --git a/core/methods/buffer_mer.py b/core/methods/buffer_mer.py
+index b047a03..9a62a76 100644
+--- a/core/methods/buffer_mer.py
++++ b/core/methods/buffer_mer.py
+@@ -39,9 +39,12 @@ class Buffer:
+         if not hasattr(self, 'buffer_data'):
+             self.init_buffer_list()
+ 
+-        for j in range(self.cfg.exp.train.batch_size):
++        batch_size = len(data_dict['imgs'])
++        for j in range(batch_size):
+             index = self.reservoir(self.num_seen_examples, self.cfg.method.er.buffer_size)
+             self.num_seen_examples += 1
++            if index < 0:
++                continue
+             for k, v in data_dict.items():
+                 if k in ['keypoints', 'names']:
+                     self.buffer_data[index].update({k: v[j]})
+@@ -49,8 +52,9 @@ class Buffer:
+                     self.buffer_data[index].update({k: v[j].to(self.device)})
+                         
+     def get_data_dict(self):
+-        choice = np.random.choice(min(self.num_seen_examples, len(self.buffer_data)),
+-                                  size=self.cfg.exp.train.batch_size, replace=False)
++        available = min(self.num_seen_examples, len(self.buffer_data))
++        sample_size = min(self.cfg.exp.train.batch_size, available)
++        choice = np.random.choice(available, size=sample_size, replace=False)
+ 
+         selected_data = {'imgs': [], 'masks': [], 'segs': [], 
+                          'keypoints': [], 'names': []}
+diff --git a/core/methods/mersam.py b/core/methods/mersam.py
+index 1dc1047..545df26 100644
+--- a/core/methods/mersam.py
++++ b/core/methods/mersam.py
+@@ -73,7 +73,7 @@ class MERSAM(ContinualReg):
+         self.opt_sam.second_step(zero_grad=True)
+         
+         # within batch reptile meta-update
+-        new_new_params = theta_A0 + self.cfg.method.mere.beta * (self.net.get_params() - theta_A0)
++        new_new_params = theta_A0 + self.cfg.method.mer.beta * (self.net.get_params() - theta_A0)
+         self.net.set_params(new_new_params)
+ 
+-        return output
+\ No newline at end of file
++        return output
+diff --git a/core/models/base.py b/core/models/base.py
+index d1ed533..1540191 100755
+--- a/core/models/base.py
++++ b/core/models/base.py
+@@ -17,7 +17,7 @@ import torch.nn.functional as F
+ import numpy as np
+ from einops import rearrange
+ 
+-from core.register.SpatialTransformer import SpatialTransformer, ResizeTransform, sub2ind
++from core.register.SpatialTransformer import SpatialTransformer
+ from core.register.LocalDisplacementEnergy import JacobianDeterminant
+ from core.metrics.Overlap import OverlapMetrics
+ from core.data.image_utils import save_image_nii, get_img_grid
+@@ -95,21 +95,21 @@ class Base(nn.Module):
+             self.fixed_kpt = [kpt[[0]] for kpt in keypoints] # B * [1, n, 3]
+             self.moving_kpt = [kpt[[1]] for kpt in keypoints]
+             
+-            self.resize = ResizeTransform(dimension=self.cfg.dataset.dim, 
+-                                          factor=2)
+-            disp_resize = self.resize(self.disp) # [B, 3, nx, ny, nz]
+-            
++            # Landmarks and displacement vectors both use the native image grid.
++            dim = self.cfg.dataset.dim
++            upper = self.disp.new_tensor(self.disp.shape[-dim:]) - 1
+             self.warped_fixed_kpt = []
+             for i in range(b):
+-                fixed_kpt_disp = torch.gather(
+-                    input=disp_resize[i].view(self.cfg.dataset.dim, -1), 
+-                    index=sub2ind(vol_shape=disp_resize.shape[-self.cfg.dataset.dim:], subs=self.fixed_kpt[i]).repeat(self.cfg.dataset.dim, 1),
+-                    dim=1)  # [3, n]
+-                self.warped_fixed_kpt.append(self.fixed_kpt[i] + fixed_kpt_disp.permute(1, 0).unsqueeze(0))
+-            
+-            self.keypoints_warped = [torch.cat([self.warped_fixed_kpt[i], 
+-                                                self.moving_kpt[i]], dim=0) for i in range(b)]
+-        
++                points = self.fixed_kpt[i][0]
++                grid = (2 * points / upper - 1).flip(-1)
++                grid = grid.reshape(1, -1, *([1] * (dim - 1)), dim)
++                sampled = F.grid_sample(self.disp[i:i+1], grid, mode='bilinear',
++                                        padding_mode='border', align_corners=True)
++                sampled = sampled.reshape(dim, -1).T
++                self.warped_fixed_kpt.append((points + sampled).unsqueeze(0))
++            self.keypoints_warped = [torch.cat([self.warped_fixed_kpt[i],
++                                               self.moving_kpt[i]], dim=0) for i in range(b)]
++
+         return self.disp
+     
+     def before_epoch(self, mode='train', i_repeat=0):
+@@ -202,7 +202,10 @@ class Base(nn.Module):
+         with torch.no_grad():
+             disp = self.net.decoder.disp
+             
+-            if 'segs' in self.data:
++            dataset_names = [name.upper() for name in self.cfg.var.dataset_names]
++            is_nlst_batch = bool(dataset_names) and all(name == 'NLST' for name in dataset_names)
++
++            if 'segs' in self.data and not is_nlst_batch:
+                 segs_warped = self.segs_warped.type(torch.int64)
+                 
+                 segs_warped = F.one_hot(segs_warped, num_classes=self.cfg.var.num_classes).float()  # [B, 2, ..., C]
+@@ -228,12 +231,24 @@ class Base(nn.Module):
+                 self.metrics_iter['metric_final'] = self.metrics_iter['dice_mean']
+                 del segs_warped
+                 
+-            if 'keypoints' in self.data:
+-                tres = torch.stack([torch.square(self.keypoints_warped[i][0] - self.keypoints_warped[i][1]).sum(dim=-1).mean(dim=-1).sqrt() for i in range(self.cfg.var.n_samples)])
+-                
+-                self.metrics_iter['tre_mean'] = torch.sum(tres) / torch.sum(tres > 0).clamp(min=1e-8)
+-                if 'metric_final' not in self.metrics_iter:
+-                    self.metrics_iter['metric_final'] = self.metrics_iter['tre_mean']
++            if 'keypoints' in self.data and is_nlst_batch:
++                nlst_spacing_mm = torch.as_tensor(
++                    self.cfg.dataset.nlst_spacing_mm,
++                    dtype=self.keypoints_warped[0].dtype,
++                    device=self.keypoints_warped[0].device,
++                )
++                tres = torch.stack([torch.square((self.keypoints_warped[i][0] - self.keypoints_warped[i][1])
++                                                   * nlst_spacing_mm).sum(dim=-1).mean(dim=-1).sqrt()
++                                    for i in range(self.cfg.var.n_samples)])
++                
++                tre_mean_mm = tres.mean()
++                self.metrics_iter['tre_mean_distance_mm'] = torch.stack([
++                    torch.linalg.vector_norm((points[0] - points[1]) * nlst_spacing_mm, dim=-1).mean()
++                    for points in self.keypoints_warped]).mean()
++                self.metrics_iter['tre_mean'] = tre_mean_mm
++                self.metrics_iter['tre_mean_mm'] = tre_mean_mm
++                if is_nlst_batch:
++                    self.metrics_iter['metric_final'] = -tre_mean_mm
+             
+             mask_fg = self.fixed_mask
+             if mode in ['val', 'test']:
+@@ -252,7 +267,7 @@ class Base(nn.Module):
+                         if self.cfg.exp.mode == 'test':
+                             self.metrics_samplewise['assd'].append(torch.mean(assds, dim=1))
+                             del assds
+-                    if 'keypoints' in self.data:
++                    if 'keypoints' in self.data and is_nlst_batch:
+                         self.metrics_samplewise['tre'].append(tres)
+                         del tres
+                     
+diff --git a/core/models/continual_reg.py b/core/models/continual_reg.py
+index 98542c1..0435d4c 100755
+--- a/core/models/continual_reg.py
++++ b/core/models/continual_reg.py
+@@ -110,7 +110,10 @@ class ContinualReg(Base):
+             interp_mode = 'bilinear'
+         
+         if 'segs' in self.data:
+-            segs_idx = list(range(len(self.cfg.var.dataset_names)))
++            segs_idx = [
++                i for i, name in enumerate(self.cfg.var.dataset_names)
++                if name.upper() != 'NLST'
++            ]
+             if len(segs_idx) > 0:
+                 segs_distorted = F.one_hot(self.segs_distorted[segs_idx].long(), num_classes=self.cfg.var.num_classes).float()
+                 segs_distorted = rearrange(segs_distorted, 'B N ... C -> B (N C) ...')
+@@ -155,9 +158,12 @@ class ContinualReg(Base):
+                 keypoints_idx = [i for i in range(len(self.cfg.var.dataset_names)) 
+                                  if self.cfg.var.dataset_names[i] == 'NLST']
+             if len(keypoints_idx) > 0:
+-                tres = torch.stack([torch.square(self.keypoints_warped[i][0] - self.keypoints_warped[i][1]).sum(dim=-1).mean(dim=-1).sqrt() for i in keypoints_idx])
++                # Norm/sqrt(N) is RMS, with a finite zero gradient at exact alignment.
++                tres = torch.stack([torch.linalg.vector_norm(self.keypoints_warped[i][0] - self.keypoints_warped[i][1])
++                                    / self.keypoints_warped[i].shape[1] ** 0.5 for i in keypoints_idx])
+                 
+-                loss += torch.mean(tres)
++                # Preserve the upstream 1.5-mm voxel loss scale; inputs now use 3-mm voxels.
++                loss += self.cfg.model.tre.coordinate_scale * torch.mean(tres)
+             
+         return loss          
+     
+@@ -202,7 +208,7 @@ class ContinualReg(Base):
+                     
+                     if dataset_name == 'NLST':
+                         kpts_distorted = torch.cat([self.fixed_kpt[b], 
+-                                                     self.fixed_kpt[b]]).div(2) # [2, n, 3]
++                                                     self.fixed_kpt[b]]) # [2, n, 3], native image grid
+                         kpts_registered = kpts_distorted.clone()
+                                                 
+                         imgs_distorted_lst = []
+@@ -305,4 +311,4 @@ class ContinualReg(Base):
+         else:
+             scheduler = None
+ 
+-        return optimizer, scheduler
+\ No newline at end of file
++        return optimizer, scheduler

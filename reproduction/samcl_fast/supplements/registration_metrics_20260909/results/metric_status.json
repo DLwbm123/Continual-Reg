@@ -1,0 +1,50 @@
+{
+  "geometry_protocol": "native_v4",
+  "seed": 42,
+  "independent_reference_seed": 42,
+  "reference_steps": 10000,
+  "missing_references": [
+    "ctct",
+    "nlst",
+    "mrct"
+  ],
+  "TRE_score_transform": "q = 1 / physical RMS TRE; BWTR = initial_TRE/final_TRE - 1; RMA = independent_TRE/initial_TRE",
+  "summaries": [
+    {
+      "method": "mer",
+      "metric": "Dice",
+      "BWTR": -0.08709704379329775,
+      "BWTR_tasks": 2,
+      "RMA": null,
+      "RMA_tasks": 2,
+      "RMA_complete": false
+    },
+    {
+      "method": "mer",
+      "metric": "TRE_mm",
+      "BWTR": -0.06701728029517517,
+      "BWTR_tasks": 1,
+      "RMA": null,
+      "RMA_tasks": 1,
+      "RMA_complete": false
+    },
+    {
+      "method": "samcl",
+      "metric": "Dice",
+      "BWTR": -0.0738881637453277,
+      "BWTR_tasks": 2,
+      "RMA": null,
+      "RMA_tasks": 2,
+      "RMA_complete": false
+    },
+    {
+      "method": "samcl",
+      "metric": "TRE_mm",
+      "BWTR": -0.08917211284043736,
+      "BWTR_tasks": 1,
+      "RMA": null,
+      "RMA_tasks": 1,
+      "RMA_complete": false
+    }
+  ]
+}

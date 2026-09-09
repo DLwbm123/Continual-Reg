@@ -1,0 +1,66 @@
+{
+  "mer": {
+    "stage_metrics_source": "reproduction/samcl_fast/corrections/nlst_native_v4_20260831/core_runs/mer/full/parallel_segment_06_to_40000_seed42/results/evaluation.csv",
+    "summary": {
+      "method": "mer",
+      "budget": "full",
+      "synthetic": false,
+      "model": "pinned Continual-Reg LKUNet",
+      "input_size": [
+        112,
+        96,
+        112
+      ],
+      "batch_size": 4,
+      "global_steps": 40000,
+      "elapsed_seconds": 69010.77659463882,
+      "peak_vram_mb": 13399.080078125,
+      "matrix_rows": 4,
+      "status": "complete",
+      "full_budget_global_steps": 40000,
+      "stop_after_global_step": 40000,
+      "geometry_protocol": "native_v4",
+      "latest_checkpoint": "${EXPERIMENT_ROOT}/corrections/nlst_native_v4_20260831/core_runs/mer/full/parallel_segment_06_to_40000_seed42/checkpoints/after_mrct.pt",
+      "resumed_session_seconds": 16802.66904449463,
+      "elapsed_seconds_basis": "accounted_active_time_lower_bound; excludes outage and unrecorded prior checkpoint overhead",
+      "elapsed_seconds_is_lower_bound": true,
+      "resume_global_step": 30000,
+      "resume_provenance": "${EXPERIMENT_ROOT}/corrections/nlst_native_v4_20260831/core_runs/mer/full/parallel_segment_06_to_40000_seed42/resume_provenance.json",
+      "peak_vram_basis": "resumed_session_only",
+      "rollback_steps": 0,
+      "rollback_training_seconds": 0.0
+    }
+  },
+  "samcl": {
+    "stage_metrics_source": "reproduction/samcl_fast/corrections/nlst_native_v4_20260831/core_runs/samcl/full/parallel_gpu2_segment_05_to_40000_seed42_retry1/results/evaluation.csv",
+    "summary": {
+      "method": "samcl",
+      "budget": "full",
+      "synthetic": false,
+      "model": "pinned Continual-Reg LKUNet",
+      "input_size": [
+        112,
+        96,
+        112
+      ],
+      "batch_size": 4,
+      "global_steps": 40000,
+      "elapsed_seconds": 101357.75229334831,
+      "peak_vram_mb": 14691.91650390625,
+      "matrix_rows": 4,
+      "status": "complete",
+      "full_budget_global_steps": 40000,
+      "stop_after_global_step": 40000,
+      "geometry_protocol": "native_v4",
+      "latest_checkpoint": "${EXPERIMENT_ROOT}/corrections/nlst_native_v4_20260831/core_runs/samcl/full/parallel_gpu2_segment_05_to_40000_seed42_retry1/checkpoints/after_mrct.pt",
+      "resumed_session_seconds": 25038.54937505722,
+      "elapsed_seconds_basis": "accounted_active_time_lower_bound; excludes outage and unrecorded prior checkpoint overhead",
+      "elapsed_seconds_is_lower_bound": true,
+      "resume_global_step": 30000,
+      "resume_provenance": "${EXPERIMENT_ROOT}/corrections/nlst_native_v4_20260831/core_runs/samcl/full/parallel_gpu2_segment_05_to_40000_seed42_retry1/resume_provenance.json",
+      "peak_vram_basis": "resumed_session_only",
+      "rollback_steps": 0,
+      "rollback_training_seconds": 0.0
+    }
+  }
+}
