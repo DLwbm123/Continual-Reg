@@ -1,0 +1,7 @@
+method,source_task,unique_later_replayed_pairs,training_pairs,DRR_task
+mer,oasis,199,10000,0.0199
+mer,ctct,89,420,0.2119047619047619
+mer,nlst,55,147,0.3741496598639456
+samcl,oasis,195,10000,0.0195
+samcl,ctct,88,420,0.20952380952380953
+samcl,nlst,46,147,0.3129251700680272

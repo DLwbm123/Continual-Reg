@@ -1,11 +1,13 @@
 # Registration metrics supplement
 
-**Completed 2026-09-09 12:31 China Standard Time.** All three 10,000-step independent references passed final-checkpoint reload evaluation; all 12 resource measurements finished. Final RMA/BWTR and resource tables are in [the report](results/REPORT.md). This is a single-seed supplement; historical DRR remains unavailable.
-
 This supplement fills missing metrics for the **existing seed-42 native-v4
 reproduction**, without importing scores from a paper or rerunning the MER/SAMCL
 continual sequences. It retains their input size (112 × 96 × 112), task order
 (OASIS → CTCT → NLST → MRCT), fixed test splits and 10,000 outer steps per task.
+
+Reference training and resource measurements completed on 2026-09-09 at 12:31 CST.
+DRR reconstruction is now complete, with all eight checkpoint endpoints verified;
+see `results/COMPLETION.json` and `results/REPORT.md` for final status and values.
 
 ## Outputs and scope
 
@@ -46,9 +48,54 @@ labels, loss/score computation, I/O or checkpoint loading are timed.
 Short timings are not extrapolated into measured full-training duration.
 Replay bytes mean logical tensor payload, not serialized size or process RSS.
 The fixed network has no growing task head; MPE is zero when stage parameter
-counts agree. Exact historical DRR cannot be recovered from buffer capacity:
-the original runs did not retain cumulative unique historical replay identities.
-That missing quantity is not replaced by a fabricated ratio.
+counts agree. The original runs did not log cumulative unique replay identities.
+DRR is recovered separately by checkpoint-verified sampling reconstruction,
+never inferred from buffer capacity. See the recovery protocol below.
+
+## DRR recovery without retraining
+
+`reconstruct_drr.py` runs the original MER/MERSAM `observe`, `draw_batches` and
+`Buffer` methods on CPU with scalar placeholders. Numeric model/optimizer work
+is disabled; no image volumes are loaded and no new performance scores are
+generated. It reuses the training providers' ordered pair lists and the exact
+`StatefulBatchStream` implementation. Training augmentation was disabled, and
+reservoir insertion and replay selection use NumPy RNG independently of weights.
+
+This is not an independently seeded approximation: at all four task endpoints
+for each method, the ordered buffer pair identities, number of seen examples,
+NumPy RNG state, global step, and all four batch-stream states must match the
+existing checkpoint. No stage resets or corrections are made to force a match.
+A mismatch writes a failure report and prevents release of the DRR result.
+Checkpoint tensors are memory-mapped; only metadata are inspected.
+
+For each historical source task, the numerator is the union of **ordered
+registration pairs actually consumed in later tasks**. The denominator is that
+source task's training pair count. DRR is the mean of those ratios over OASIS,
+CTCT and NLST; MRCT has no later task and is excluded. The sample unit is a
+registration pair, not an individual image or patient. A repeated pair or a
+second SAM forward counts once. Buffer draws that the method discards do not
+count; MERSAM's otherwise-unused first draw must still consume its original RNG.
+Same-task buffer use does not count as historical replay. `DRR*` denotes raw
+image replay; it does not measure optimizer updates or elapsed computation.
+
+The reconstruction follows the retained final training trajectory. Rolled-back
+attempts are excluded, consistent with the checkpoints used for RMA/BWTR.
+Pair names remain in memory; the public output contains only aggregate counts
+and checkpoint gate outcomes. No patient identities or replay tensors are exported.
+
+In the existing experiment environment, with the runtime paths below configured:
+
+```sh
+python -m unittest test_drr
+python reconstruct_drr.py --experiment-root "$EXPERIMENT_ROOT" \
+  --data-root "$LEARN2REG_ROOT" --output results/drr_reconstruction.json
+python collect_metrics.py --root .
+```
+
+The output must not already exist. Outputs are `drr_reconstruction.json`,
+`drr_task_metrics.csv`, and `drr_stage_counts.csv` under `results/`. The metric
+collector accepts the aggregate only after all eight checkpoint gates and the
+six source-task counts pass validation.
 
 ## Recompute the available metrics without a GPU
 

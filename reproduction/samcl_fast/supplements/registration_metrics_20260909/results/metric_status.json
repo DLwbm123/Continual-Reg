@@ -4,6 +4,11 @@
   "independent_reference_seed": 42,
   "reference_steps": 10000,
   "missing_references": [],
+  "DRR_status": "reconstructed_checkpoint_verified",
+  "DRR": {
+    "mer": 0.20198480725623583,
+    "samcl": 0.18064965986394557
+  },
   "TRE_score_transform": "q = 1 / physical RMS TRE; BWTR = initial_TRE/final_TRE - 1; RMA = independent_TRE/initial_TRE",
   "summaries": [
     {

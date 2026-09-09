@@ -1,0 +1,13 @@
+method,current_task,source_task,unique_pairs_used_in_stage,cumulative_unique_pairs_used_later
+mer,ctct,oasis,199,199
+mer,nlst,oasis,96,199
+mer,nlst,ctct,89,89
+mer,mrct,oasis,62,199
+mer,mrct,ctct,59,89
+mer,mrct,nlst,55,55
+samcl,ctct,oasis,195,195
+samcl,nlst,oasis,106,195
+samcl,nlst,ctct,88,88
+samcl,mrct,oasis,71,195
+samcl,mrct,ctct,63,88
+samcl,mrct,nlst,46,46

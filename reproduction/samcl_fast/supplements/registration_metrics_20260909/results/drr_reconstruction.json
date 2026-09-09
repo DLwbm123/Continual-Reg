@@ -1,0 +1,242 @@
+{
+  "status": "complete",
+  "seed": 42,
+  "steps_per_task": 10000,
+  "batch_size": 4,
+  "buffer_capacity": 200,
+  "sample_unit": "ordered registration pair",
+  "numerator": "unique training pairs consumed in later tasks; union over later stages",
+  "denominator": "number of unique pairs in that task training dataset",
+  "DRR_formula": "mean(N_unique_later_replayed / N_train) over OASIS, CTCT, NLST",
+  "replay_type": "raw_images",
+  "notation": "DRR*",
+  "recovery": "original observe/draw/Buffer code with numeric work disabled; checkpoint-gated",
+  "path_scope": "retained final training trajectory; excludes rolled-back attempts",
+  "no_gpu_or_image_loading": true,
+  "methods": [
+    {
+      "method": "mer",
+      "DRR": 0.20198480725623583,
+      "tasks": 3
+    },
+    {
+      "method": "samcl",
+      "DRR": 0.18064965986394557,
+      "tasks": 3
+    }
+  ],
+  "task_records": [
+    {
+      "method": "mer",
+      "source_task": "oasis",
+      "unique_later_replayed_pairs": 199,
+      "training_pairs": 10000,
+      "DRR_task": 0.0199
+    },
+    {
+      "method": "mer",
+      "source_task": "ctct",
+      "unique_later_replayed_pairs": 89,
+      "training_pairs": 420,
+      "DRR_task": 0.2119047619047619
+    },
+    {
+      "method": "mer",
+      "source_task": "nlst",
+      "unique_later_replayed_pairs": 55,
+      "training_pairs": 147,
+      "DRR_task": 0.3741496598639456
+    },
+    {
+      "method": "samcl",
+      "source_task": "oasis",
+      "unique_later_replayed_pairs": 195,
+      "training_pairs": 10000,
+      "DRR_task": 0.0195
+    },
+    {
+      "method": "samcl",
+      "source_task": "ctct",
+      "unique_later_replayed_pairs": 88,
+      "training_pairs": 420,
+      "DRR_task": 0.20952380952380953
+    },
+    {
+      "method": "samcl",
+      "source_task": "nlst",
+      "unique_later_replayed_pairs": 46,
+      "training_pairs": 147,
+      "DRR_task": 0.3129251700680272
+    }
+  ],
+  "stage_records": [
+    {
+      "method": "mer",
+      "current_task": "ctct",
+      "source_task": "oasis",
+      "unique_pairs_used_in_stage": 199,
+      "cumulative_unique_pairs_used_later": 199
+    },
+    {
+      "method": "mer",
+      "current_task": "nlst",
+      "source_task": "oasis",
+      "unique_pairs_used_in_stage": 96,
+      "cumulative_unique_pairs_used_later": 199
+    },
+    {
+      "method": "mer",
+      "current_task": "nlst",
+      "source_task": "ctct",
+      "unique_pairs_used_in_stage": 89,
+      "cumulative_unique_pairs_used_later": 89
+    },
+    {
+      "method": "mer",
+      "current_task": "mrct",
+      "source_task": "oasis",
+      "unique_pairs_used_in_stage": 62,
+      "cumulative_unique_pairs_used_later": 199
+    },
+    {
+      "method": "mer",
+      "current_task": "mrct",
+      "source_task": "ctct",
+      "unique_pairs_used_in_stage": 59,
+      "cumulative_unique_pairs_used_later": 89
+    },
+    {
+      "method": "mer",
+      "current_task": "mrct",
+      "source_task": "nlst",
+      "unique_pairs_used_in_stage": 55,
+      "cumulative_unique_pairs_used_later": 55
+    },
+    {
+      "method": "samcl",
+      "current_task": "ctct",
+      "source_task": "oasis",
+      "unique_pairs_used_in_stage": 195,
+      "cumulative_unique_pairs_used_later": 195
+    },
+    {
+      "method": "samcl",
+      "current_task": "nlst",
+      "source_task": "oasis",
+      "unique_pairs_used_in_stage": 106,
+      "cumulative_unique_pairs_used_later": 195
+    },
+    {
+      "method": "samcl",
+      "current_task": "nlst",
+      "source_task": "ctct",
+      "unique_pairs_used_in_stage": 88,
+      "cumulative_unique_pairs_used_later": 88
+    },
+    {
+      "method": "samcl",
+      "current_task": "mrct",
+      "source_task": "oasis",
+      "unique_pairs_used_in_stage": 71,
+      "cumulative_unique_pairs_used_later": 195
+    },
+    {
+      "method": "samcl",
+      "current_task": "mrct",
+      "source_task": "ctct",
+      "unique_pairs_used_in_stage": 63,
+      "cumulative_unique_pairs_used_later": 88
+    },
+    {
+      "method": "samcl",
+      "current_task": "mrct",
+      "source_task": "nlst",
+      "unique_pairs_used_in_stage": 46,
+      "cumulative_unique_pairs_used_later": 46
+    }
+  ],
+  "checks": [
+    {
+      "method": "mer",
+      "after_task": "oasis",
+      "checkpoint": "core_runs/mer/full/j3_01_s42/checkpoints/after_oasis.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "mer",
+      "after_task": "ctct",
+      "checkpoint": "core_runs/mer/full/j3_01_s42/checkpoints/after_ctct.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "mer",
+      "after_task": "nlst",
+      "checkpoint": "corrections/nlst_native_v4_20260831/core_runs/mer/full/parallel_segment_04_to_30000_seed42/checkpoints/after_nlst.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "mer",
+      "after_task": "mrct",
+      "checkpoint": "corrections/nlst_native_v4_20260831/core_runs/mer/full/parallel_segment_06_to_40000_seed42/checkpoints/after_mrct.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "samcl",
+      "after_task": "oasis",
+      "checkpoint": "core_runs/samcl/full/j3_03_s42/checkpoints/after_oasis.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "samcl",
+      "after_task": "ctct",
+      "checkpoint": "core_runs/samcl/full/j3_03_s42/checkpoints/after_ctct.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "samcl",
+      "after_task": "nlst",
+      "checkpoint": "corrections/nlst_native_v4_20260831/core_runs/samcl/full/parallel_segment_03_to_30000_seed42/checkpoints/after_nlst.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    },
+    {
+      "method": "samcl",
+      "after_task": "mrct",
+      "checkpoint": "corrections/nlst_native_v4_20260831/core_runs/samcl/full/parallel_gpu2_segment_05_to_40000_seed42_retry1/checkpoints/after_mrct.pt",
+      "global_step": true,
+      "num_seen_examples": true,
+      "ordered_buffer_pair_names": true,
+      "numpy_rng": true,
+      "all_batch_streams": true
+    }
+  ],
+  "elapsed_seconds": 408.5501079559326,
+  "completed_at": "2026-09-09T13:02:24+0000"
+}
