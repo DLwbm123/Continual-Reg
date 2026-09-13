@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "unit_tests": 3,
+  "smoke_not_formal_results": true,
+  "checks": {
+    "sequential": {
+      "four_task_smoke": "passed",
+      "peak_allocated_mib": 14483.48291015625
+    },
+    "ewc": {
+      "four_task_smoke": "passed",
+      "peak_allocated_mib": 14483.4833984375
+    },
+    "si": {
+      "four_task_smoke": "passed",
+      "peak_allocated_mib": 14547.42041015625,
+      "resume_metric_max_abs_difference": 0.0
+    },
+    "gpm": {
+      "four_task_smoke": "passed",
+      "peak_allocated_mib": 14483.48291015625,
+      "resume_metric_max_abs_difference": 0.0
+    }
+  },
+  "source_commit": "7cf685a7c429635a64380dd1d286accb68117b2c"
+}

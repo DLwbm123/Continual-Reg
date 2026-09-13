@@ -1,0 +1,76 @@
+{
+  "status": "complete",
+  "method": "sequential",
+  "seed": 42,
+  "steps_per_task": 10000,
+  "batch_size": 4,
+  "geometry_protocol": "native_v4",
+  "source_commit": "7cf685a7c429635a64380dd1d286accb68117b2c",
+  "smoke": false,
+  "task_order": [
+    "oasis",
+    "ctct",
+    "nlst",
+    "mrct"
+  ],
+  "train_pairs": {
+    "oasis": 10000,
+    "ctct": 420,
+    "nlst": 147,
+    "mrct": 1584
+  },
+  "test_pairs": {
+    "oasis": 200,
+    "ctct": 30,
+    "nlst": 42,
+    "mrct": 8
+  },
+  "parameter_count": 8187014,
+  "SI_parameters": {
+    "c": 1.0,
+    "xi": 0.1,
+    "provenance": "explicit untuned supplement configuration; no upstream SI preset"
+  },
+  "resource_scope": "observational timings on shared GPU; not directly matched to prior isolated profiling",
+  "active_seconds": 36534.049925409025,
+  "metrics": [
+    {
+      "task": "oasis",
+      "metric": "Dice",
+      "initial": 0.7256416630744934,
+      "final": 0.3438427299261093,
+      "BWTR": -0.5261535446169512,
+      "RMA": null
+    },
+    {
+      "task": "ctct",
+      "metric": "Dice",
+      "initial": 0.40955452919006347,
+      "final": 0.28229127724965414,
+      "BWTR": -0.3107357943082344,
+      "RMA": 1.1981458968588212
+    },
+    {
+      "task": "nlst",
+      "metric": "TRE_mm",
+      "initial": 5.103240512666249,
+      "final": 11.584243184044247,
+      "BWTR": -0.5594670768224822,
+      "RMA": 0.9854906007221644
+    },
+    {
+      "task": "mrct",
+      "metric": "Dice",
+      "initial": 0.5380136370658875,
+      "final": 0.5380136370658875,
+      "BWTR": null,
+      "RMA": 1.0298086900370162
+    }
+  ],
+  "MPE": 0,
+  "DRR": 0.0,
+  "DRR_type": "no_sample_replay",
+  "DRR_note": "EWC Fisher revisits are separately counted in boundaries; regularization statistics are not replay memory",
+  "checkpoint_reload": "all_four_stage_evaluations_loaded_saved_model",
+  "boundaries": []
+}

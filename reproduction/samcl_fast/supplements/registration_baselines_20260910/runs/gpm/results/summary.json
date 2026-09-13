@@ -1,0 +1,98 @@
+{
+  "status": "complete",
+  "method": "gpm",
+  "seed": 42,
+  "steps_per_task": 10000,
+  "batch_size": 4,
+  "geometry_protocol": "native_v4",
+  "source_commit": "7cf685a7c429635a64380dd1d286accb68117b2c",
+  "smoke": false,
+  "task_order": [
+    "oasis",
+    "ctct",
+    "nlst",
+    "mrct"
+  ],
+  "train_pairs": {
+    "oasis": 10000,
+    "ctct": 420,
+    "nlst": 147,
+    "mrct": 1584
+  },
+  "test_pairs": {
+    "oasis": 200,
+    "ctct": 30,
+    "nlst": 42,
+    "mrct": 8
+  },
+  "parameter_count": 8187014,
+  "SI_parameters": {
+    "c": 1.0,
+    "xi": 0.1,
+    "provenance": "explicit untuned supplement configuration; no upstream SI preset"
+  },
+  "resource_scope": "observational timings on shared GPU; not directly matched to prior isolated profiling",
+  "active_seconds": 62667.080235251924,
+  "metrics": [
+    {
+      "task": "oasis",
+      "metric": "Dice",
+      "initial": 0.7250649583339691,
+      "final": 0.4868218046426773,
+      "BWTR": -0.32858180629597555,
+      "RMA": null
+    },
+    {
+      "task": "ctct",
+      "metric": "Dice",
+      "initial": 0.3821899890899658,
+      "final": 0.30320020715395607,
+      "BWTR": -0.20667674243402512,
+      "RMA": 1.1180913275559257
+    },
+    {
+      "task": "nlst",
+      "metric": "TRE_mm",
+      "initial": 4.8942815235682895,
+      "final": 9.073759078979492,
+      "BWTR": -0.4606114752477273,
+      "RMA": 1.0275656466100658
+    },
+    {
+      "task": "mrct",
+      "metric": "Dice",
+      "initial": 0.533680871129036,
+      "final": 0.533680871129036,
+      "BWTR": null,
+      "RMA": 1.0215153686297753
+    }
+  ],
+  "MPE": 0,
+  "DRR": 0.49873015873015875,
+  "DRR_type": "gradient_subspace_construction",
+  "DRR_note": "EWC Fisher revisits are separately counted in boundaries; regularization statistics are not replay memory",
+  "checkpoint_reload": "all_four_stage_evaluations_loaded_saved_model",
+  "boundaries": [
+    {
+      "task": "oasis",
+      "source_train_pairs": 10000,
+      "samples_revisited": 200,
+      "representation_pairs": 200,
+      "seconds": 5607.567776239943
+    },
+    {
+      "task": "ctct",
+      "source_train_pairs": 420,
+      "samples_revisited": 200,
+      "representation_pairs": 200,
+      "seconds": 9809.032711647917
+    },
+    {
+      "task": "nlst",
+      "source_train_pairs": 147,
+      "samples_revisited": 147,
+      "representation_pairs": 147,
+      "seconds": 6245.709873531014
+    }
+  ]
+}

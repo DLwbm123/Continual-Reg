@@ -1,0 +1,9 @@
+{
+  "completed_at": "2026-09-11T11:27:37.101158+00:00",
+  "status": {
+    "status": "complete",
+    "global_step": 40000
+  },
+  "exitcode": 0,
+  "stderr_bytes": 0
+}

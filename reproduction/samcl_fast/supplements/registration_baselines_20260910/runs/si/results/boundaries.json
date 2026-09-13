@@ -1,0 +1,23 @@
+[
+  {
+    "task": "oasis",
+    "source_train_pairs": 10000,
+    "samples_revisited": 0,
+    "representation_pairs": 0,
+    "seconds": 0.0033675909508019686
+  },
+  {
+    "task": "ctct",
+    "source_train_pairs": 420,
+    "samples_revisited": 0,
+    "representation_pairs": 0,
+    "seconds": 0.002880383050069213
+  },
+  {
+    "task": "nlst",
+    "source_train_pairs": 147,
+    "samples_revisited": 0,
+    "representation_pairs": 0,
+    "seconds": 0.00209557986818254
+  }
+]
